@@ -1,7 +1,7 @@
 <template>
   <div class="">
     <div class="">
-      <h4>Emit Page</h4>
+      <h4>Home Page</h4>
       <div class="">
         <pre>
           {{ eventAData }}

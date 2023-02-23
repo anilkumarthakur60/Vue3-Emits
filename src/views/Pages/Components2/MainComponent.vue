@@ -1,14 +1,14 @@
 <template>
   <div class="">
     <div class="">
-      <h4>Child Form Data </h4>
+      <h4>About Page</h4>
       <div class="">
         <pre>
           {{ message }}
         </pre>
       </div>
     </div>
-    <ChildComponent></ChildComponent>
+    <ChildComponent />
   </div>
 </template>
 <script setup>
