@@ -72,9 +72,6 @@
 
       <div class="col-lg-1 col-md-2 col-sm-4 " v-for="item in selectedImageList" :key="item.id">
         <input class="" type="checkbox" v-model="imageCheckbox"
-
-               @change="emit('update:modelValue', selectedImageList)"
-
                :value="item" :id="item.id"/>
         <label :for="item.id">
           <img :src="item.path" :alt="item.id" style="height: 100px; width: 100px"/>
