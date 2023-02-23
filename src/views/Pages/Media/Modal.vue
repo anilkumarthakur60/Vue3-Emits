@@ -1,12 +1,13 @@
 <template>
 
   <!-- Button trigger modal -->
-  <button type="button" class="btn btn-sm btn-outline-success" data-bs-toggle="modal" data-bs-target="#exampleModal">
+  <button type="button" class="btn btn-sm btn-outline-success" @click="callApi" data-bs-toggle="modal" data-bs-target="#exampleModal">
     Pick File
   </button>
 
   <!-- Modal -->
-  <div class="modal fade " ref="myModal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal fade " ref="myModal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+       aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable modal-fullscreen ">
       <div class="modal-content">
         <div class="modal-header">
@@ -14,7 +15,18 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          {{ imageCheckbox }}
+          <div class="row">
+            <div class="col-12 col-md-9 col-sm-2">
+              Filters
+            </div>
+              <div class="col-sm-3">
+
+                <div class="form-group">
+                  <label class="control-label">Upload File</label>
+                  <input type="file" class="form-control" @change="handleFileUpload"  placeholder="Enter zip code">
+                </div>
+            </div>
+          </div>
           <div class="row">
 
             <div class="col-lg-1 col-md-2 col-sm-4 " v-for="item in images" :key="item.id">
@@ -34,13 +46,14 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" data-bs-dismiss="modal"  @click="submitForm" >Save changes</button>
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @click="submitForm">Save changes
+          </button>
         </div>
       </div>
     </div>
   </div>
 
-  <div class=""  v-if="imageSelectedAndModalClosed">
+  <div class="" v-if="imageSelectedAndModalClosed">
     <div class="row">
       <div class="col-lg-1 col-md-2 col-sm-4 " v-for="item in selectedImageList" :key="item.id">
         <img :src="item.path" :alt="item.id" style="height: 100px; width: 100px"/>
@@ -49,16 +62,16 @@
   </div>
 
 
-
 </template>
 
 <script setup>
 import {onMounted, ref, watch} from "vue";
 import {useImages} from "../../../Composables/useImages";
+import axios from "axios";
 
 
 defineProps({
-  className:{
+  className: {
     type: String,
     default: "",
   },
@@ -86,27 +99,49 @@ const imageCheckbox = ref([])
 const images = ref([]);
 const myModal = ref(null);
 
-const  selectedImageList=ref([])
-const  imageSelectedAndModalClosed=ref(false)
+const selectedImageList = ref([])
+const imageSelectedAndModalClosed = ref(false)
+
+const selectedFile = ref(null);
+const form = ref(null);
 
 const emit = defineEmits(['update:modelValue'])
 onMounted(() => {
+  callApi()
+})
+
+function  callApi() {
   images.value = searchImages({
     termSearch: 'cat',
     page: 2
   }).then((res) => {
     images.value = res.data?.data
   })
-})
+}
 
-function  submitForm() {
-  imageSelectedAndModalClosed.value=true
-  emit('update:modelValue', selectedImageList.value.map((item)=>item.id))
+function submitForm() {
+  imageSelectedAndModalClosed.value = true
+  emit('update:modelValue', selectedImageList.value.map((item) => item.id))
 }
 
 watch(imageCheckbox, (val) => {
   console.log('---------data logging--------', val);
   selectedImageList.value = val
 })
+const handleFileUpload = (event) => {
+  selectedFile.value = event.target.files[0];
+  uploadFile()
+}
 
+async function uploadFile ()  {
+  const formData = new FormData();
+  formData.append('file', selectedFile.value);
+  await axios.post('http://localhost:8000/api/medias', formData).then((res) => {
+    callApi()
+  }).catch((err) => {
+    console.log(err);
+  }).finally(() => {
+    console.log('finally');
+  })
+}
 </script>
