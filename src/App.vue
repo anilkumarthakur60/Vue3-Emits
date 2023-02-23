@@ -18,6 +18,9 @@ import { RouterLink, RouterView } from 'vue-router'
           <li class="nav-item">
             <RouterLink to="/about" class="nav-link">About</RouterLink>
           </li>
+          <li class="nav-item">
+            <RouterLink to="/clone" class="nav-link">About</RouterLink>
+          </li>
 
         </ul>
 

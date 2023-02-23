@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import MainComponent from "@/views/Pages/Components1/MainComponent.vue";
 import MainComponent1 from "@/views/Pages/Components2/MainComponent.vue";
+import CloneDiv from "@/views/CloneDiv.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -14,6 +15,11 @@ const router = createRouter({
       path: '/about',
       name: 'about',
     component:MainComponent1
+    },
+    {
+      path: '/clone',
+      name: 'about',
+      component:CloneDiv
     }
   ]
 })
