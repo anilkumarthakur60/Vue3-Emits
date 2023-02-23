@@ -1,8 +1,8 @@
 <template>
 
   <!-- Button trigger modal -->
-  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-    Launch demo modal
+  <button type="button" class="btn btn-sm btn-outline-success" data-bs-toggle="modal" data-bs-target="#exampleModal">
+    Pick File
   </button>
 
   <!-- Modal -->
@@ -56,6 +56,31 @@
 import {onMounted, ref, watch} from "vue";
 import {useImages} from "../../../Composables/useImages";
 
+
+defineProps({
+  className:{
+    type: String,
+    default: "",
+  },
+  id: {
+    type: String,
+    default: "exampleFormControlInput14",
+
+  },
+  label: {
+    type: String,
+    default: "Form Label",
+  },
+  modelValue: {
+    type: [String, Number],
+    default: "",
+  },
+  type: {
+    type: String,
+    default: "text",
+  },
+});
+
 const {searchImages} = useImages()
 const imageCheckbox = ref([])
 const images = ref([]);
@@ -64,6 +89,7 @@ const myModal = ref(null);
 const  selectedImageList=ref([])
 const  imageSelectedAndModalClosed=ref(false)
 
+const emit = defineEmits(['update:modelValue'])
 onMounted(() => {
   images.value = searchImages({
     termSearch: 'cat',
@@ -75,7 +101,7 @@ onMounted(() => {
 
 function  submitForm() {
   imageSelectedAndModalClosed.value=true
-
+  emit('update:modelValue', selectedImageList.value.map((item)=>item.id))
 }
 
 watch(imageCheckbox, (val) => {

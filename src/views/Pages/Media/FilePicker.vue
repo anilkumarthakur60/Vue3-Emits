@@ -1,6 +1,12 @@
 <template>
 
-  <Modal></Modal>
+  <div class="">
+
+    <pre>
+      {{formData}}
+    </pre>
+  <Modal v-model="formData.images"></Modal>
+  </div>
 
 </template>
 
@@ -13,6 +19,9 @@ const {searchImages} = useImages()
 const imageCheckbox = ref([])
 const images = ref([]);
 const myModal = ref(null);
+
+const  formData=ref({
+})
 
 onMounted(() => {
   images.value = searchImages({
