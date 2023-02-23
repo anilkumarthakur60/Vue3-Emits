@@ -68,8 +68,17 @@
 
   <div class="" v-if="imageSelectedAndModalClosed">
     <div class="row">
+
+
       <div class="col-lg-1 col-md-2 col-sm-4 " v-for="item in selectedImageList" :key="item.id">
-        <img :src="item.path" :alt="item.id" style="height: 100px; width: 100px"/>
+        <input class="" type="checkbox" v-model="imageCheckbox"
+
+               @change="emit('update:modelValue', selectedImageList)"
+
+               :value="item" :id="item.id"/>
+        <label :for="item.id">
+          <img :src="item.path" :alt="item.id" style="height: 100px; width: 100px"/>
+        </label>
       </div>
     </div>
   </div>
@@ -140,6 +149,7 @@ function submitForm() {
 watch(imageCheckbox, (val) => {
   console.log('---------data logging--------', val);
   selectedImageList.value = val
+  emit('update:modelValue', selectedImageList.value.map((item) => item.id))
 })
 const handleFileUpload = (event) => {
   selectedFile.value = event.target.files[0];
