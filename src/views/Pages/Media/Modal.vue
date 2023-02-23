@@ -16,13 +16,26 @@
         </div>
         <div class="modal-body">
           <div class="row">
-            <div class="col-12 col-md-9 col-sm-2">
-              Filters
+            <div class="col-md-4 col-12">
+
+              <div class="form-group">
+                <input type="text" class="form-control"   placeholder="Search">
+              </div>
             </div>
-              <div class="col-sm-3">
+            <div class="col-md-4 col-12">
+
+              <div class="form-group">
+                <select class="form-select" aria-label="Default select example">
+                  <option selected>Type</option>
+                  <option value="1">Image</option>
+                  <option value="2">Video</option>
+                  <option value="3">Attachment</option>
+                </select>
+              </div>
+            </div>
+              <div class="col-sm-3 col-12">
 
                 <div class="form-group">
-                  <label class="control-label">Upload File</label>
                   <input type="file" class="form-control" @change="handleFileUpload"  placeholder="Enter zip code">
                 </div>
             </div>
