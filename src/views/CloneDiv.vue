@@ -28,7 +28,6 @@
               v-model="attachments[i].id"
               type="text"
               class="form-control "
-              @update:value="val => attachments[i].id = val"
           />
           <button
               class="btn btn-sm btn-danger ml-2"
