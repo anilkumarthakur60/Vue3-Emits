@@ -21,13 +21,16 @@ import { RouterLink, RouterView } from 'vue-router'
           <li class="nav-item">
             <RouterLink to="/clone" class="nav-link">About</RouterLink>
           </li>
+          <li class="nav-item">
+            <RouterLink to="/file" class="nav-link">File</RouterLink>
+          </li>
 
         </ul>
 
       </div>
     </div>
   </nav>
-  <div class="container">
+  <div >
 
     <RouterView />
   </div>
