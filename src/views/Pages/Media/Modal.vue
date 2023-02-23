@@ -42,12 +42,18 @@
           </div>
           <div class="row">
 
-            <div class="col-lg-1 col-md-2 col-sm-4 " v-for="item in images" :key="item.id">
+            <pre>
+              {{loopImageCheckBox}}
+            </pre>
+            <pre>
+              {{modelValue}}
+            </pre>
+            <div class="col-lg-1 col-md-2 col-sm-4 " v-for="item in serverImageList" :key="item.id">
 
               <div class="form-check form-check-inline">
 
-                <input class="" type="checkbox" v-model="imageCheckbox" :value="item" :id="item.id"/>
-                <label :for="item.id">
+                <input class="" type="checkbox" v-model="loopImageCheckBox" :value="item" :id="item.id"/>
+                <label :for="item.id"> {{item.id}}
                   <img :src="item.path" :alt="item.id" style="height: 100px; width: 100px"/>
                 </label>
               </div>
@@ -70,8 +76,8 @@
     <div class="row">
 
 
-      <div class="col-lg-1 col-md-2 col-sm-4 " v-for="item in selectedImageList" :key="item.id">
-        <input class="" type="checkbox" v-model="imageCheckbox"
+      <div class="col-lg-1 col-md-2 col-sm-4 " v-for="item in loopImageCheckBox" :key="item.id">
+        <input class="" type="checkbox" v-model="loopImageCheckBox"
                :value="item" :id="item.id"/>
         <label :for="item.id">
           <img :src="item.path" :alt="item.id" style="height: 100px; width: 100px"/>
@@ -89,7 +95,7 @@ import {useImages} from "../../../Composables/useImages";
 import axios from "axios";
 
 
-defineProps({
+const props=defineProps({
   className: {
     type: String,
     default: "",
@@ -111,11 +117,15 @@ defineProps({
     type: String,
     default: "text",
   },
+  oldFile:{
+    type: Array,
+    default: () => [],
+  },
 });
 
 const {searchImages} = useImages()
-const imageCheckbox = ref([])
-const images = ref([]);
+const loopImageCheckBox = ref([])
+const serverImageList = ref([]);
 const myModal = ref(null);
 
 const selectedImageList = ref([])
@@ -126,28 +136,47 @@ const form = ref(null);
 
 const emit = defineEmits(['update:modelValue'])
 onMounted(() => {
+  if (props.oldFile?.length > 0) {
+    imageSelectedAndModalClosed.value = true
+    loopImageCheckBox.value = props.oldFile.map((item) => {
+      return {
+        id: item.id,
+        path: item.path
+      }
+    })
+  }
+
   callApi()
 })
 
+
+watch(loopImageCheckBox, (val) => {
+  emit('update:modelValue', val.map((item) => item.id))
+  //
+}, {deep: true, immediate: true})
+
+
+
 function  callApi() {
-  images.value = searchImages({
+ searchImages({
     termSearch: 'cat',
     page: 2
   }).then((res) => {
-    images.value = res.data?.data
+    serverImageList.value = res.data?.data
+    loopImageCheckBox.value=res.data.data.filter((item) => {
+      return props.oldFile.some((oldItem) => {
+        return oldItem.id === item.id
+      })
+    })
   })
 }
 
 function submitForm() {
   imageSelectedAndModalClosed.value = true
-  emit('update:modelValue', selectedImageList.value.map((item) => item.id))
+  emit('update:modelValue', loopImageCheckBox.value.map((item) => item.id))
 }
 
-watch(imageCheckbox, (val) => {
-  console.log('---------data logging--------', val);
-  selectedImageList.value = val
-  emit('update:modelValue', selectedImageList.value.map((item) => item.id))
-})
+
 const handleFileUpload = (event) => {
   selectedFile.value = event.target.files[0];
   uploadFile()
