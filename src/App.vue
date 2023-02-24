@@ -24,6 +24,9 @@ import { RouterLink, RouterView } from 'vue-router'
           <li class="nav-item">
             <RouterLink to="/file" class="nav-link">File</RouterLink>
           </li>
+          <li class="nav-item">
+            <RouterLink to="/posts" class="nav-link">Posts</RouterLink>
+          </li>
 
         </ul>
 

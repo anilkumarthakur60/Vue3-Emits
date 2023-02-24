@@ -1,14 +1,12 @@
 <template>
 
-  <!-- Button trigger modal -->
   <button type="button" class="btn btn-sm btn-outline-success" @click="callApi" data-bs-toggle="modal" data-bs-target="#exampleModal">
     Pick File
   </button>
 
-  <!-- Modal -->
-  <div class="modal fade " ref="myModal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+  <div class="modal fade "  id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
        aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable  ">
+    <div class="modal-dialog modal-dialog-scrollable modal-fullscreen  ">
       <div class="modal-content">
         <div class="modal-header">
           <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
@@ -41,14 +39,6 @@
             </div>
           </div>
           <div class="row">
-
-            <pre>
-            loop checkbox image  {{loopImageCheckBox}}
-            </pre>
-            <pre>
-             model value: {{modelValue}}
-            </pre>
-
             <div class="col-lg-3 col-md-2 col-sm-4 " v-for="item in serverImageList" :key="item.id">
               <div class="form-check form-check-inline">
                 <input class="" type="checkbox" v-model="loopImageCheckBox" :value="item" :id="item.id"/>
@@ -56,6 +46,32 @@
                   <img :src="item.path" :alt="item.id" style="height: 100px; width: 100px"/>
                 </label>
               </div>
+            </div>
+
+            <pre>
+              {{meta}}
+            </pre>
+            <div class="col-12">
+              <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-end">
+
+                  <li v-if="meta.current_page > 1" class="page-item">
+                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                  </li>
+                  <li v-else class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                  </li>
+
+                  <li v-for="link in meta.links" class="page-item" :key="link.url">
+                    <RouterLink class="page-link" :to="link.path">1</RouterLink>
+                  </li>
+
+                  <li class="page-item">
+                    <a class="page-link" href="#">Next</a>
+                  </li>
+                </ul>
+              </nav>
+
             </div>
 
           </div>
@@ -86,9 +102,11 @@
 </template>
 
 <script setup>
-import {computed, onMounted, ref, watch} from "vue";
+import { onMounted, ref, watch} from "vue";
 import {useImages} from "../../../Composables/useImages";
 import axios from "axios";
+import { RouterLink } from 'vue-router'
+
 
 
 const props=defineProps({
@@ -106,7 +124,6 @@ const {searchImages} = useImages()
 const loopImageCheckBox = ref([])
 const serverImageList = ref([]);
 const computedLoopImage = ref([]);
-const myModal = ref(null);
 
 const imageSelectedAndModalClosed = ref(false)
 
@@ -122,27 +139,26 @@ onMounted(() => {
    callApi()
 })
 
-//
 watch(loopImageCheckBox, (val) => {
   computedLoopImage.value = val.map((item) => item.id)
   emit('update:modelValue', computedLoopImage.value)
 }, {deep: true, immediate: true})
 
 
-// const fileValue = computed({
-//   get: () => props.value,
-//   set: val => {
-//     context.emit('update:value', val)
-//   }
-// })
 
 
+const meta=ref({})
 function  callApi() {
- searchImages({
+   searchImages({
     termSearch: 'cat',
     page: 2
   }).then((res) => {
+    meta.value = res.data?.meta
     serverImageList.value = res.data?.data
+  }).catch((err) => {
+    console.log(err);
+  }).finally(() => {
+    console.log('finally');
   })
 }
 
