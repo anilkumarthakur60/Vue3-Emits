@@ -14,11 +14,11 @@
           </div>
           <div class="col-4">
             <label for="exampleFormControlInput12" class="form-label">Email</label>
-            <input type="text" v-model="filters.email" class="form-control-sm" id="exampleFormControlInput12" placeholder="name@example.com">
+            <input type="text" v-model="filters.email" v-on:keyup.enter="fetchData" class="form-control-sm" id="exampleFormControlInput12" placeholder="name@example.com">
           </div>
           <div class="col-4">
             <label for="exampleFormControlInput122" class="form-label">Phone</label>
-            <input type="text" v-model="filters.phone"  class="form-control-sm" id="exampleFormControlInput122" placeholder="name@example.com">
+            <input type="text" v-model="filters.phone" v-on:keyup.enter="fetchData"  class="form-control-sm" id="exampleFormControlInput122" placeholder="name@example.com">
           </div>
 
         </div>
@@ -72,6 +72,13 @@ const  filters=ref({})
 
 
 const loading = ref(false);
+
+const filtersComputed=computed((val)=>{
+  get:()=>JSON.stringify(filters.value)
+  set:(val)=>{
+    filters.value=val
+  }
+})
 
 const fetchData = async () => {
   loading.value = true;

@@ -1,22 +1,18 @@
 <template>
 
   <div class="">
-
-    <pre>
-     Parent v model value: {{formData?.images}}
-    </pre>
-  <Modal v-model="formData.images" :old-file="oldImage" ></Modal>
+    <Modal v-model="formData.images" :old-file="oldImage"/>
   </div>
 
 </template>
 
 <script setup>
-import {onMounted, ref} from "vue";
+import { ref} from "vue";
 import Modal from "@/views/Pages/Media/Modal.vue";
 
 
-const  formData=ref({
-  images:[]
+const formData = ref({
+  images: []
 })
 const oldImage = ref([
   {
@@ -54,9 +50,6 @@ const oldImage = ref([
   },
 ])
 
-onMounted(() => {
-
-})
 
 
 </script>

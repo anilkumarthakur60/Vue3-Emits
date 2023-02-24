@@ -10,27 +10,27 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'home',
+      name: 'Home',
       component: MainComponent
     },
     {
       path: '/about',
-      name: 'about',
+      name: 'About',
     component:MainComponent1
     },
     {
       path: '/clone',
-      name: 'about',
+      name: 'Clone',
       component:CloneDiv
     },
     {
       path: '/file',
-      name: 'about',
+      name: 'FilePicker',
       component:FilePicker
     },
     {
       path: '/posts',
-      name: 'posts',
+      name: 'PostListPage',
       component:PostListPage
     }
   ]
