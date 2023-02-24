@@ -1,122 +1,123 @@
 <template>
+  <div class="" ref="modalRef">
+    <button type="button" class="btn btn-sm btn-outline-success" @click="callApi" data-bs-toggle="modal"
+            data-bs-target="#exampleModal">
+      Pick File
+    </button>
 
-  <button type="button" class="btn btn-sm btn-outline-success" @click="callApi" data-bs-toggle="modal" data-bs-target="#exampleModal">
-    Pick File
-  </button>
+    <div class="modal fade " id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+      <div class="modal-dialog modal-dialog-scrollable modal-fullscreen  ">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-md-4 col-12">
 
-  <div class="modal fade "  id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-       aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable modal-fullscreen  ">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <div class="row">
-            <div class="col-md-4 col-12">
-
-              <div class="form-group">
-                <input type="text" class="form-control"   placeholder="Search">
+                <div class="form-group">
+                  <input type="text" class="form-control" placeholder="Search">
+                </div>
               </div>
-            </div>
-            <div class="col-md-4 col-12">
+              <div class="col-md-4 col-12">
 
-              <div class="form-group">
-                <select class="form-select" aria-label="Default select example">
-                  <option selected>Type</option>
-                  <option value="1">Image</option>
-                  <option value="2">Video</option>
-                  <option value="3">Attachment</option>
-                </select>
+                <div class="form-group">
+                  <select class="form-select" aria-label="Default select example">
+                    <option selected>Type</option>
+                    <option value="1">Image</option>
+                    <option value="2">Video</option>
+                    <option value="3">Attachment</option>
+                  </select>
+                </div>
               </div>
-            </div>
               <div class="col-sm-3 col-12">
 
                 <div class="form-group">
-                  <input type="file" class="form-control" @change="handleFileUpload"  >
+                  <input type="file" class="form-control" @change="handleFileUpload">
                 </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-lg-3 col-md-2 col-sm-4 " v-for="item in serverImageList" :key="item.id">
-              <div class="form-check form-check-inline">
-                <input class="" type="checkbox" v-model="loopImageCheckBox" :value="item" :id="item.id"/>
-                <label :for="item.id"> {{item.id}}
-                  <img :src="item.path" :alt="item.id" style="height: 100px; width: 100px"/>
-                </label>
               </div>
             </div>
+            <div class="row">
+              <div class="col-lg-1 col-md-2 col-sm-4 " v-for="item in serverImageList" :key="item.id">
+                <div class="form-check form-check-inline">
+                  <input class="" type="checkbox" v-model="loopImageCheckBox" :value="item" :id="item.id"/>
+                  <label :for="item.id"> {{ item.id }}
+                    <img :src="item.path" :alt="item.id" style="height: 100px; width: 100px"/>
+                  </label>
+                </div>
+              </div>
 
-            <pre>
-              {{meta}}
-            </pre>
-            <div class="col-12">
-              <nav aria-label="Page navigation example">
-                <ul class="pagination justify-content-end">
+              <div class="col-12">
+                <nav aria-label="Page navigation example">
+                  <ul class="pagination justify-content-end">
 
-                  <li v-if="meta.current_page > 1" class="page-item">
-                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
-                  </li>
-                  <li v-else class="page-item disabled">
-                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
-                  </li>
+                    <li v-if="meta.current_page > 1" class="page-item">
+                      <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                    </li>
+                    <li v-else class="page-item disabled">
+                      <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                    </li>
 
-                  <li v-for="link in meta.links" class="page-item" :key="link.url">
-                    <RouterLink class="page-link" :to="link.path">1</RouterLink>
-                  </li>
+                    <li v-for="link in meta.links" class="page-item" :key="link.url">
+                      <RouterLink class="page-link" :to="link.path">1</RouterLink>
+                    </li>
 
-                  <li class="page-item">
-                    <a class="page-link" href="#">Next</a>
-                  </li>
-                </ul>
-              </nav>
+                    <li class="page-item">
+                      <a class="page-link" href="#">Next</a>
+                    </li>
+                  </ul>
+                </nav>
+
+              </div>
 
             </div>
 
           </div>
-
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @click="submitForm">Save changes
-          </button>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @click="submitForm">Save changes
+            </button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <div class="" v-if="imageSelectedAndModalClosed">
-    <div class="row">
-      <div class="col-lg-1 col-md-2 col-sm-4 " v-for="item in loopImageCheckBox" :key="item.id">
-        <input class="" type="checkbox" v-model="loopImageCheckBox"
-               :value="item" :id="item.id"/>
-        <label :for="item.id">
-          <img :src="item.path" :alt="item.id" style="height: 100px; width: 100px"/>
-        </label>
+    {{imageSelectedAndModalClosed}}
+    <br>
+    {{loopImageCheckBox}}
+    <div class="" v-if="imageSelectedAndModalClosed">
+      <div class="row">
+        <div class="col-lg-1 col-md-2 col-sm-4 " v-for="item in loopImageCheckBox" :key="item.id">
+          <input class="" type="checkbox" v-model="loopImageCheckBox"
+                 :value="item" :id="item.id"/>
+          <label :for="item.id">
+            <img :src="item.path" :alt="item.id" style="height: 100px; width: 100px"/>
+          </label>
+        </div>
       </div>
     </div>
-  </div>
 
+  </div>
 
 </template>
 
 <script setup>
-import { onMounted, ref, watch} from "vue";
+import {onMounted, ref, watch,defineProps} from "vue";
 import {useImages} from "../../../Composables/useImages";
 import axios from "axios";
-import { RouterLink } from 'vue-router'
+import {RouterLink} from 'vue-router'
 
 
-
-const props=defineProps({
+const props = defineProps({
   modelValue: {
     type: [String, Number],
     default: "",
   },
-  oldFile:{
-    type: Array,
-    default: () => [],
+  oldFile: {
+    type: [Array],
+    default: [],
   },
 });
 
@@ -124,6 +125,7 @@ const {searchImages} = useImages()
 const loopImageCheckBox = ref([])
 const serverImageList = ref([]);
 const computedLoopImage = ref([]);
+const modalRef = ref(null)
 
 const imageSelectedAndModalClosed = ref(false)
 
@@ -132,11 +134,11 @@ const selectedFileForUpload = ref(null);
 
 const emit = defineEmits(['update:modelValue'])
 onMounted(() => {
-  if (props.oldFile.length > 0) {
+  if (props.oldFile?.length > 0) {
     imageSelectedAndModalClosed.value = true
     loopImageCheckBox.value = props.oldFile
   }
-   callApi()
+  callApi()
 })
 
 watch(loopImageCheckBox, (val) => {
@@ -145,27 +147,22 @@ watch(loopImageCheckBox, (val) => {
 }, {deep: true, immediate: true})
 
 
+const meta = ref({})
 
-
-const meta=ref({})
-function  callApi() {
-   searchImages({
+function callApi() {
+  searchImages({
     termSearch: 'cat',
     page: 2
   }).then((res) => {
-    meta.value = res.data?.meta
     serverImageList.value = res.data?.data
   }).catch((err) => {
     console.log(err);
   }).finally(() => {
-    console.log('finally');
   })
 }
 
 function submitForm() {
   imageSelectedAndModalClosed.value = true
-
-  emit('update:modelValue', computedLoopImage.value)
 }
 
 
@@ -174,7 +171,7 @@ const handleFileUpload = (event) => {
   uploadFile()
 }
 
-async function uploadFile ()  {
+async function uploadFile() {
   const formData = new FormData();
   formData.append('file', selectedFileForUpload.value);
   await axios.post('http://localhost:8000/api/medias', formData).then((res) => {

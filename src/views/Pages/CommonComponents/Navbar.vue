@@ -12,7 +12,7 @@
 
 
           <li class="nav-item" v-for="(item,index) in routesName" :key="item.name">
-            <RouterLink :to="{name:item.name,params:item.params}" class="nav-link" :class="index===0?'active':''" aria-current="page">
+            <RouterLink :to="{name:item.name}" class="nav-link" :class="index===0?'active':''" aria-current="page">
               {{ item.label }}
             </RouterLink>
           </li>
@@ -29,28 +29,24 @@ import {RouterLink} from 'vue-router'
 
 const routesName = [
   {
-    path: '/',
+    path: '/home',
     name: 'Home',
     label: 'Home',
-    params: {}
   },
   {
     path: '/about',
     name: 'About',
     label: 'About',
-    params: {}
   },
   {
     path: '/clone',
     name: 'Clone',
     label: 'Clone',
-    params: {}
   },
   {
     path: '/file',
     name: 'FilePicker',
     label: 'FilePicker',
-    params: {}
   },
   {
     path: '/posts',
