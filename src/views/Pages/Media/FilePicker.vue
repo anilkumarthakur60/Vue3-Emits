@@ -3,7 +3,7 @@
   <div class="">
 
     <pre>
-     Parent v model value: {{formData?.images?.map((item) => {return item.id}).join(', ')}}
+     Parent v model value: {{formData?.images}}
     </pre>
   <Modal v-model="formData.images" :old-file="oldImage" ></Modal>
   </div>

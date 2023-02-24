@@ -36,29 +36,27 @@
               <div class="col-sm-3 col-12">
 
                 <div class="form-group">
-                  <input type="file" class="form-control" @change="handleFileUpload"  placeholder="Enter zip code">
+                  <input type="file" class="form-control" @change="handleFileUpload"  >
                 </div>
             </div>
           </div>
           <div class="row">
 
             <pre>
-              {{loopImageCheckBox}}
+            loop checkbox image  {{loopImageCheckBox}}
             </pre>
             <pre>
-              {{modelValue}}
+             model value: {{modelValue}}
             </pre>
+
             <div class="col-lg-1 col-md-2 col-sm-4 " v-for="item in serverImageList" :key="item.id">
-
               <div class="form-check form-check-inline">
-
                 <input class="" type="checkbox" v-model="loopImageCheckBox" :value="item" :id="item.id"/>
                 <label :for="item.id"> {{item.id}}
                   <img :src="item.path" :alt="item.id" style="height: 100px; width: 100px"/>
                 </label>
               </div>
             </div>
-
 
           </div>
 
@@ -74,8 +72,6 @@
 
   <div class="" v-if="imageSelectedAndModalClosed">
     <div class="row">
-
-
       <div class="col-lg-1 col-md-2 col-sm-4 " v-for="item in loopImageCheckBox" :key="item.id">
         <input class="" type="checkbox" v-model="loopImageCheckBox"
                :value="item" :id="item.id"/>
@@ -96,26 +92,9 @@ import axios from "axios";
 
 
 const props=defineProps({
-  className: {
-    type: String,
-    default: "",
-  },
-  id: {
-    type: String,
-    default: "exampleFormControlInput14",
-
-  },
-  label: {
-    type: String,
-    default: "Form Label",
-  },
   modelValue: {
     type: [String, Number],
     default: "",
-  },
-  type: {
-    type: String,
-    default: "text",
   },
   oldFile:{
     type: Array,
@@ -128,28 +107,20 @@ const loopImageCheckBox = ref([])
 const serverImageList = ref([]);
 const myModal = ref(null);
 
-const selectedImageList = ref([])
 const imageSelectedAndModalClosed = ref(false)
 
-const selectedFile = ref(null);
-const form = ref(null);
+const selectedFileForUpload = ref(null);
 
 const emit = defineEmits(['update:modelValue'])
 onMounted(() => {
-  if (props.oldFile?.length > 0) {
+  if (props.oldFile.length > 0) {
     imageSelectedAndModalClosed.value = true
-    loopImageCheckBox.value = props.oldFile.map((item) => {
-      return {
-        id: item.id,
-        path: item.path
-      }
-    })
+    loopImageCheckBox.value = props.oldFile
   }
-
-  callApi()
+   callApi()
 })
 
-
+//
 watch(loopImageCheckBox, (val) => {
   emit('update:modelValue', val.map((item) => item.id))
   //
@@ -178,13 +149,13 @@ function submitForm() {
 
 
 const handleFileUpload = (event) => {
-  selectedFile.value = event.target.files[0];
+  selectedFileForUpload.value = event.target.files[0];
   uploadFile()
 }
 
 async function uploadFile ()  {
   const formData = new FormData();
-  formData.append('file', selectedFile.value);
+  formData.append('file', selectedFileForUpload.value);
   await axios.post('http://localhost:8000/api/medias', formData).then((res) => {
     callApi()
   }).catch((err) => {
