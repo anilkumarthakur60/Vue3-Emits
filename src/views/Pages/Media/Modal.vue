@@ -8,7 +8,7 @@
   <!-- Modal -->
   <div class="modal fade " ref="myModal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
        aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable modal-fullscreen ">
+    <div class="modal-dialog modal-dialog-scrollable  ">
       <div class="modal-content">
         <div class="modal-header">
           <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
@@ -49,7 +49,7 @@
              model value: {{modelValue}}
             </pre>
 
-            <div class="col-lg-1 col-md-2 col-sm-4 " v-for="item in serverImageList" :key="item.id">
+            <div class="col-lg-3 col-md-2 col-sm-4 " v-for="item in serverImageList" :key="item.id">
               <div class="form-check form-check-inline">
                 <input class="" type="checkbox" v-model="loopImageCheckBox" :value="item" :id="item.id"/>
                 <label :for="item.id"> {{item.id}}
@@ -86,7 +86,7 @@
 </template>
 
 <script setup>
-import {onMounted, ref, watch} from "vue";
+import {computed, onMounted, ref, watch} from "vue";
 import {useImages} from "../../../Composables/useImages";
 import axios from "axios";
 
@@ -105,11 +105,13 @@ const props=defineProps({
 const {searchImages} = useImages()
 const loopImageCheckBox = ref([])
 const serverImageList = ref([]);
+const computedLoopImage = ref([]);
 const myModal = ref(null);
 
 const imageSelectedAndModalClosed = ref(false)
 
 const selectedFileForUpload = ref(null);
+
 
 const emit = defineEmits(['update:modelValue'])
 onMounted(() => {
@@ -122,10 +124,17 @@ onMounted(() => {
 
 //
 watch(loopImageCheckBox, (val) => {
-  emit('update:modelValue', val.map((item) => item.id))
-  //
+  computedLoopImage.value = val.map((item) => item.id)
+  emit('update:modelValue', computedLoopImage.value)
 }, {deep: true, immediate: true})
 
+
+// const fileValue = computed({
+//   get: () => props.value,
+//   set: val => {
+//     context.emit('update:value', val)
+//   }
+// })
 
 
 function  callApi() {
@@ -134,17 +143,13 @@ function  callApi() {
     page: 2
   }).then((res) => {
     serverImageList.value = res.data?.data
-    loopImageCheckBox.value=res.data.data.filter((item) => {
-      return props.oldFile.some((oldItem) => {
-        return oldItem.id === item.id
-      })
-    })
   })
 }
 
 function submitForm() {
   imageSelectedAndModalClosed.value = true
-  emit('update:modelValue', loopImageCheckBox.value.map((item) => item.id))
+
+  emit('update:modelValue', computedLoopImage.value)
 }
 
 
