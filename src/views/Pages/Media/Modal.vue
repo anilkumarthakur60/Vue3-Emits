@@ -10,7 +10,7 @@
       <div class="modal-dialog modal-dialog-scrollable modal-fullscreen  ">
         <div class="modal-content">
           <div class="modal-header">
-            <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+            <h1 class="modal-title fs-5" id="exampleModalLabel">File Manager</h1>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
@@ -35,17 +35,18 @@
               <div class="col-sm-3 col-12">
 
                 <div class="form-group">
-                  <input type="file" class="form-control" @change="handleFileUpload">
+                  <input type="file" class="form-control" multiple @change="handleFileChange">
                 </div>
               </div>
             </div>
-            <div class="row">
-              <div class="col-lg-1 col-md-2 col-sm-4 " v-for="item in serverImageList" :key="item.id">
-                <div class="form-check form-check-inline">
-                  <input class="" type="checkbox" v-model="loopImageCheckBox" :value="item" :id="item.id"/>
-                  <label :for="item.id"> {{ item.id }}
-                    <img :src="item.path" :alt="item.id" style="height: 100px; width: 100px"/>
+            <div class="row mt-4 g-1">
+              <div class="col-lg-2 col-md-3 col-sm-4  my-2 " v-for="item in serverImageList" :key="item.id">
+                <div class="form-check form-check-inline border shadow d-flex flex-column ">
+                  <input class="ms-auto p-3" type="checkbox" v-model="loopImageCheckBox" :value="item" :id="item.id"/>
+                  <label :for="item.id">
+                    <img :src="item.path" :alt="item.id" class="img-fluid"/>
                   </label>
+
                 </div>
               </div>
 
@@ -84,17 +85,19 @@
       </div>
     </div>
 
-    {{imageSelectedAndModalClosed}}
-    <br>
-    {{loopImageCheckBox}}
+
     <div class="" v-if="imageSelectedAndModalClosed">
-      <div class="row">
-        <div class="col-lg-1 col-md-2 col-sm-4 " v-for="item in loopImageCheckBox" :key="item.id">
-          <input class="" type="checkbox" v-model="loopImageCheckBox"
-                 :value="item" :id="item.id"/>
-          <label :for="item.id">
-            <img :src="item.path" :alt="item.id" style="height: 100px; width: 100px"/>
-          </label>
+
+      <div class="row mt-4 g-1">
+        <div class="col-lg-2 col-md-3 col-sm-4  my-2 " v-for="item in loopImageCheckBox" :key="item.id">
+          <div class="form-check form-check-inline border shadow d-flex flex-column ">
+
+            <input class="ms-auto me-1 mt-1 " type="checkbox" v-model="loopImageCheckBox"
+                   :value="item" :id="item.id"/>
+            <label :for="item.id">
+              <img :src="item.path" :alt="item.id" class="img-fluid"/>
+            </label>
+          </div>
         </div>
       </div>
     </div>
@@ -104,7 +107,7 @@
 </template>
 
 <script setup>
-import {onMounted, ref, watch,defineProps} from "vue";
+import {onMounted, ref, watch, defineProps} from "vue";
 import {useImages} from "../../../Composables/useImages";
 import axios from "axios";
 import {RouterLink} from 'vue-router'
@@ -129,7 +132,7 @@ const modalRef = ref(null)
 
 const imageSelectedAndModalClosed = ref(false)
 
-const selectedFileForUpload = ref(null);
+const selectedFileForUpload = ref([]);
 
 
 const emit = defineEmits(['update:modelValue'])
@@ -166,20 +169,18 @@ function submitForm() {
 }
 
 
-const handleFileUpload = (event) => {
-  selectedFileForUpload.value = event.target.files[0];
-  uploadFile()
+const handleFileChange = (event) => {
+  selectedFileForUpload.value = Array.from(event.target.files);
+  uploadFiles()
+}
+async function uploadFiles() {
+  for (const file of selectedFileForUpload.value) {
+    const formData = new FormData()
+    formData.append('file', file)
+    await axios.post('http://localhost:8000/api/medias', formData)
+  }
+  selectedFileForUpload.value = []
+  callApi()
 }
 
-async function uploadFile() {
-  const formData = new FormData();
-  formData.append('file', selectedFileForUpload.value);
-  await axios.post('http://localhost:8000/api/medias', formData).then((res) => {
-    callApi()
-  }).catch((err) => {
-    console.log(err);
-  }).finally(() => {
-    console.log('finally');
-  })
-}
 </script>
