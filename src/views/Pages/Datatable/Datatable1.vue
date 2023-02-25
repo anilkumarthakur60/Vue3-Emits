@@ -18,6 +18,10 @@
           :server-items-length="serverItemsLength"
           :loading="loading"
           buttons-pagination
+          must-sort
+
+
+
       >
         <template #header-name="header">
           <div class="filter-column">
@@ -79,6 +83,7 @@ import axios from "axios";
 
 const headers = ref([
   {text: "Name", value: "name", sortable: true},
+  {text: "Slug", value: "slug", sortable: true},
 ]);
 
 
