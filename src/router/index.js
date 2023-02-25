@@ -4,6 +4,7 @@ import MainComponent1 from "@/views/Pages/Components2/MainComponent.vue";
 import CloneDiv from "@/views/CloneDiv.vue";
 import FilePicker from "@/views/Pages/Media/FilePicker.vue";
 import PostListPage from "@/views/Pages/Post/PostListPage.vue";
+import DatatableMain from "@/views/Pages/Datatable/DatatableMain.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -32,6 +33,11 @@ const router = createRouter({
       path: '/posts',
       name: 'PostListPage',
       component:PostListPage
+    },
+    {
+      path: '/datatable',
+      name: 'DataTable',
+      component:DatatableMain
     }
   ]
 })

@@ -53,6 +53,12 @@ const routesName = [
     name: 'PostListPage',
     label: 'PostListPage',
     params: {}
+  },
+  {
+    path: '/datatable',
+    name: 'DataTable',
+    label: 'DataTable',
+    params: {}
   }
 ]
 
