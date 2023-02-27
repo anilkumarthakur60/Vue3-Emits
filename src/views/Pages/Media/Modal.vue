@@ -108,7 +108,7 @@
 
 <script setup>
 import {onMounted, ref, watch, defineProps} from "vue";
-import {useImages} from "../../../Composables/useImages";
+import {useImages} from "@/Composables/useImages";
 import axios from "axios";
 import {RouterLink} from 'vue-router'
 
