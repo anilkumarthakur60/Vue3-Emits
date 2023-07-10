@@ -43,6 +43,12 @@ const routesName = [
     name: 'Clone',
     label: 'Clone',
   },
+
+  {
+    path: '/clone1',
+    name: 'CloneDivSecond',
+    label: 'CloneDivSecond',
+  },
   {
     path: '/file',
     name: 'FilePicker',
